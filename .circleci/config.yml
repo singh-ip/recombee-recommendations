@@ -1,0 +1,51 @@
+version: 2.1
+jobs:
+  ci:
+    machine:
+      image: ubuntu-2004:202201-02
+    resource_class: medium
+    working_directory: ~/code
+    environment:
+      - CIRCLE_PROJECT_REPONAME: fl-laravel_boilerplate
+    steps:
+      - checkout
+      - run:
+          name: Check Rejected Commits
+          command: wget https://api.reviewee.it/repository/$CIRCLE_PROJECT_REPONAME/haveRejectedCommits -q -O - | grep -q '\"success\":true'
+      - run:
+          name: Docker compose
+          command: docker-compose -f ci-docker-compose.yml up -d
+      - run:
+          name: CI checks
+          command: docker-compose -f ci-docker-compose.yml exec lbp-api composer run ci
+      - run:
+          name: Setup dev environment
+          command: docker-compose -f ci-docker-compose.yml exec lbp-api composer run dev
+      - run:
+          name: Postman tests
+          command: docker-compose -f ci-docker-compose.yml exec lbp-api postman collection run postman/ci-collection.json
+
+  cd:
+    machine:
+      image: ubuntu-2004:202201-02
+    resource_class: medium
+    working_directory: ~/code
+    steps:
+      - checkout
+      - run:
+          name: Heroku deploy
+          command: git push --force https://heroku:$HEROKU_AUTH_KEY@git.heroku.com/$HEROKU_UAT_APP_NAME.git HEAD:refs/heads/master
+
+workflows:
+  version: 2
+  ci-cd:
+    jobs:
+      - ci:
+          filters:
+            branches:
+              only:
+                - main
+                - staging
+      - cd:
+          requires:
+            - ci
