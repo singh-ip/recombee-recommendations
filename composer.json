@@ -139,13 +139,13 @@
                 ]
             },
             "pre-commit": [
-                "docker-compose exec -T lbp-api composer run pre-commit"
+                "docker-compose exec -T recombee-api composer run pre-commit"
             ],
             "pre-push": [
-                "docker-compose exec -T lbp-api composer run pre-push"
+                "docker-compose exec -T recombee-api composer run pre-push"
             ],
             "post-merge": [
-                "docker-compose exec -T lbp-api composer run post-merge"
+                "docker-compose exec -T recombee-api composer run post-merge"
             ]
         }
     },

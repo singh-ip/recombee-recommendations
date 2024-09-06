@@ -1,36 +1,36 @@
 version : "3"
 services:
-  lbp-api:
+  recombee-api:
     build:
       context: .
       dockerfile: dockerfiles/Ci.Dockerfile
-    container_name: lbp-api
+    container_name: recombee-api
     depends_on:
-      - lbp-pg
+      - recombee-pg
     restart: always
     ports:
       - "1010:80"
     environment:
       APP_NAME: "Laravel API boilerplate"
-      DB_HOST: "lbp-pg"
+      DB_HOST: "recombee-pg"
       MAIL_HOST: "lbp-mailpit"
     networks:
-      lbp-network:
+      recombee-network:
         ipv4_address: 10.10.1.1
     extra_hosts:
       - host.docker.internal:host-gateway
 
-  lbp-pg:
+  recombee-pg:
     image: postgres:15
-    container_name: lbp-pg
+    container_name: recombee-pg
     volumes:
-      - lbp-pg-disk:/var/lib/postgres
+      - recombee-pg-disk:/var/lib/postgres
     restart: always
     environment:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: testing
     networks:
-      lbp-network:
+      recombee-network:
         ipv4_address: 10.10.1.2
 
   lbp-mailpit:
@@ -38,7 +38,7 @@ services:
     container_name: lbp-mailpit
     restart: always
     networks:
-      lbp-network:
+      recombee-network:
         ipv4_address: 10.10.1.3
 
 #  lbp-q:
@@ -47,12 +47,12 @@ services:
 #      dockerfile: dockerfiles/QueueListener.Dockerfile
 #    container_name: lbp-q
 #    depends_on:
-#      - lbp-api
+#      - recombee-api
 #    volumes:
 #      - .:/var/www/html
 #    restart: unless-stopped
 #    networks:
-#      lbp-network:
+#      recombee-network:
 #        ipv4_address: 10.10.1.4
 
 #  lbp-0x:
@@ -61,12 +61,12 @@ services:
 #      dockerfile: dockerfiles/0x.Dockerfile
 #    container_name: lbp-0x
 #    depends_on:
-#      - lbp-api
+#      - recombee-api
 #    volumes:
 #      - .:/var/www/html
 #    restart: always
 #    networks:
-#      lbp-network:
+#      recombee-network:
 #        ipv4_address: 10.10.1.5
 
 #  lbp-fe-app:
@@ -81,16 +81,16 @@ services:
 #      #- ./dockerfiles:/var/www/html/dockerfiles
 #    restart: always
 #    networks:
-#      lbp-network:
+#      recombee-network:
 #        ipv4_address: 10.10.1.6
 
 # On-disk storage of DB data, when containers are stopped
 volumes:
-  lbp-pg-disk: {}
+  recombee-pg-disk: {}
 
 # Local network for services running using this docker-compose config
 networks:
-  lbp-network:
+  recombee-network:
     ipam:
       driver: default
       config:

@@ -21,15 +21,15 @@ jobs:
       - name: Docker Compose
         run: docker-compose -f ci-docker-compose.yml up -d
       - name: Setup dev environment
-        run: docker-compose -f ci-docker-compose.yml exec -T lbp-api composer run dev
+        run: docker-compose -f ci-docker-compose.yml exec -T recombee-api composer run dev
       - name: Pre Commit
-        run: docker-compose -f ci-docker-compose.yml exec -T lbp-api composer run pre-commit
+        run: docker-compose -f ci-docker-compose.yml exec -T recombee-api composer run pre-commit
       - name: Pest tests
-        run: docker-compose -f ci-docker-compose.yml exec -T lbp-api vendor/bin/pest
+        run: docker-compose -f ci-docker-compose.yml exec -T recombee-api vendor/bin/pest
       - name: Postman tests
-        run: docker-compose -f ci-docker-compose.yml exec -T lbp-api postman collection run postman/ci-collection.json
+        run: docker-compose -f ci-docker-compose.yml exec -T recombee-api postman collection run postman/ci-collection.json
 #      - name: CI checks
-#        run: docker-compose -f ci-docker-compose.yml exec -T lbp-api composer run ci
+#        run: docker-compose -f ci-docker-compose.yml exec -T recombee-api composer run ci
 
 #      - name: Postman tests
-#        run: docker-compose -f ci-docker-compose.yml exec -T lbp-api postman collection run postman/ci-collection.json
+#        run: docker-compose -f ci-docker-compose.yml exec -T recombee-api postman collection run postman/ci-collection.json
